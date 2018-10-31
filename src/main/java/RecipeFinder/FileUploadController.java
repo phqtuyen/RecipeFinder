@@ -12,12 +12,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -34,14 +29,28 @@ public class FileUploadController {
     RecipeData recipeData;
     IngredientData ingredientData;
     RecipeData cookableRecipe;
+    String recipeFileName;
+    String ingredientFileName;
 
     @Autowired
     public FileUploadController() {
+        this.init();
+    }
+
+    public void init() {
         this.recipeData = new RecipeData();
         this.ingredientData = new IngredientData();
         this.cookableRecipe = new RecipeData();
         this.uploadedIngredient = false;
         this.uploadedRecipe = false;
+        this.recipeFileName = "";
+        this.ingredientFileName = "";
+    }
+
+    @GetMapping("/refresh")
+    public String refreshData() {
+        this.init();
+        return "redirect:/";
     }
 
     @GetMapping("/")
@@ -53,6 +62,10 @@ public class FileUploadController {
             model.addAttribute("message", "");
         if (!attr.containsKey("errorMessage"))
             model.addAttribute("errorMessage", "");
+        if (!attr.containsKey("recipeFileName"))
+            model.addAttribute("recipeFileName", this.recipeFileName);
+        if (!attr.containsKey("ingredientFileName"))
+            model.addAttribute("ingredientFileName", this.ingredientFileName);
         return "index";
     }
 
@@ -71,10 +84,6 @@ public class FileUploadController {
         if (this.recipeData.size() > 0 && this.ingredientData.size() > 0) {
             this.cookableRecipe = this.recipeData.getCookableRecipes(this.ingredientData);
             this.cookableRecipe.sortByDate();
-//            System.out.println("=============================");
-//            for (Recipe recipe: this.cookableRecipe)
-//                System.out.println(recipe);
-//            System.out.println("=============================");
             if (this.cookableRecipe.size() > 0)
                 redirectAttributes.addFlashAttribute("recipe", this.cookableRecipe);
             else
@@ -93,16 +102,10 @@ public class FileUploadController {
             ObjectMapper objectMapper = new ObjectMapper();
             System.out.println("pass");
             this.recipeData = objectMapper.readValue(jsonData, RecipeData.class);
-//            for (Recipe r: this.recipeData) {
-//                System.out.println(r);
-//                System.out.println("size " + Integer.toString(r.getIngredients().size()));
-//                for (Ingredient i: r.getIngredients()) {
-//                    System.out.println(i);
-//                }
-//                System.out.println("==============");
-//            }
             this.uploadedRecipe = true;
+            this.recipeFileName = file.getOriginalFilename();
             redirectAttributes.addFlashAttribute("errorMessage", "Upload recipes succeed.");
+            redirectAttributes.addFlashAttribute("recipeFileName", this.recipeFileName);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Upload recipes fail.");
             System.out.println(e);
@@ -125,17 +128,11 @@ public class FileUploadController {
             }
             System.out.println("pass 10 " + Integer.toString(this.ingredientData.size()));
             this.ingredientData = this.ingredientData.filterOutdatedItems();
-//            System.out.println("=============================");
-//            for (Ingredient i : this.ingredientData) {
-//                System.out.println(i);
-//            }
-//            System.out.println("=============================");
             this.ingredientData.sortByDate();
-//            for (Ingredient i : this.ingredientData) {
-//                System.out.println(i);
-//            }
             this.uploadedIngredient = true;
+            this.ingredientFileName = file.getOriginalFilename();
             redirectAttributes.addFlashAttribute("errorMessage", "Upload ingredients succeed.");
+            redirectAttributes.addFlashAttribute("ingredientFileName", this.ingredientFileName);
         } catch (Exception e) {
             redirectAttributes.addFlashAttribute("errorMessage", "Upload ingredients fail.");
             System.out.println(e);

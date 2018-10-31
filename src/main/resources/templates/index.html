@@ -10,8 +10,11 @@
 <div>
     <form method="POST" enctype="multipart/form-data" action="/uploadRecipe">
         <table>
-            <tr><td>Choose recipe:</td><td><input type="file" name="file" /></td></tr>
+            <tr><td>Choose recipe:</td><td><input type="file" name="file"/></td></tr>
             <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+            <div th:if="${recipeFileName}">
+                <tr><td>Current File: </td><td><label th:text="${recipeFileName}"></label></td></tr>
+            </div>
         </table>
     </form>
 </div>
@@ -19,11 +22,16 @@
 <div>
     <form method="POST" enctype="multipart/form-data" action="/uploadIngredient">
         <table>
-            <tr><td>Choose Ingredient:</td><td><input type="file" name="file" /></td></tr>
+            <tr><td>Choose Ingredient:</td><td><input type="file" name="file"/></td></tr>
             <tr><td></td><td><input type="submit" value="Upload" /></td></tr>
+            <div th:if="${ingredientFileName}">
+                <tr><td>Current File: </td><td><label th:text="${ingredientFileName}"></label></td></tr>
+            </div>
         </table>
     </form>
 </div>
+
+<button onclick="window.location.href='/refresh'">Refresh</button>
 
 <form action="/getRecipe" method="get">
     <button name="getRecipe" type="submit" value="getRecipe">get your favorite recipe</button>
