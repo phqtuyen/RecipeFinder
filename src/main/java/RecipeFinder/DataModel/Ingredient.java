@@ -1,5 +1,7 @@
 package RecipeFinder.DataModel;
 
+import java.time.format.DateTimeFormatter;
+import java.time.LocalDate;
 import java.util.*;
 import java.text.SimpleDateFormat;
 
@@ -43,12 +45,11 @@ public class Ingredient {
     private String item;
     private int amount;
     private Unit unit;
-    private Date usedBy;
+    private LocalDate usedBy;
 
     public Ingredient() {}
 
     public void setUnit(String unit) {
-        System.out.println("unit " + unit);
         Unit ingredientUni = Unit.isMember(unit);
         if (ingredientUni != null) {
             this.unit = ingredientUni;
@@ -60,7 +61,6 @@ public class Ingredient {
     }
 
     public void setItem(String item) {
-        System.out.println("item " + item);
         this.item = item;
     }
 
@@ -69,7 +69,6 @@ public class Ingredient {
     }
 
     public void setAmount(int amount) {
-        System.out.println("amount " + Integer.toString(amount));
         this.amount = amount;
     }
 
@@ -77,24 +76,33 @@ public class Ingredient {
         return this.unit;
     }
 
-    public Date getUsedBy() {
+    public LocalDate getUsedBy() {
         return this.usedBy;
     }
 
     public void setUsedBy(String usedBy) {
-        System.out.println("Date " + usedBy);
         try {
-            this.usedBy = new SimpleDateFormat("dd/MM/yyyy").parse(usedBy);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+            this.usedBy = LocalDate.parse(usedBy, formatter);
         } catch (Exception e) {
             System.out.println(e);
         }
 
     }
 
+    public boolean isUsable() {
+        return this.usedBy != null && (this.usedBy.isAfter(LocalDate.now()) || this.usedBy.isEqual(LocalDate.now()));
+    }
+
+    public boolean matchRequirement(Ingredient requirement) {
+        return requirement.getItem().equalsIgnoreCase(this.getItem())
+                && requirement.getUnit() == this.getUnit() && requirement.getAmount() <= this.getAmount();
+    }
+
     public String toString() {
         if (this.usedBy == null)
             return this.item + " " + Integer.toString(this.amount) + " " + this.unit.toString();
-        return this.item + " " + Integer.toString(this.amount) + " " + this.unit.toString() + this.usedBy.toString();
+        return this.item + " " + Integer.toString(this.amount) + " " + this.unit.toString() + " " +this.usedBy.toString();
     }
 }
 

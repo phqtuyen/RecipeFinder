@@ -1,9 +1,11 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
 
-<!--<div th:if="${message}">-->
-    <!--<h2 th:text="${message}"/>-->
-<!--</div>-->
+<h1> What should I cook?</h1>
+
+<div th:if="${errorMessage}">
+    <h2 th:text="${errorMessage}"/>
+</div>
 
 <div>
     <form method="POST" enctype="multipart/form-data" action="/uploadRecipe">
@@ -27,13 +29,25 @@
     <button name="getRecipe" type="submit" value="getRecipe">get your favorite recipe</button>
 </form>
 
-<!--<div>-->
-    <!--<ul>-->
-        <!--<li th:each="file : ${files}">-->
-            <!--<a th:href="${file}" th:text="${file}" />-->
-        <!--</li>-->
-    <!--</ul>-->
-<!--</div>-->
+<div>
+    <label>What to cook today?</label>
+    <div th:if="${message}">
+        <label th:text="${message}"></label>
+    </div>
+    <div th:if="${recipes.size() > 0}">
+        <label>Recipes to Cook</label>
+        <ul>
+            <li th:each="recipe : ${recipes}">
+                <label th:text="${recipe.name}"/>
+                <ul class="ingredients">
+                    <li th:each="ingredient : ${recipe.getIngredients()}">
+                        <label th:text="${ingredient.toString()}"/>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
 
 </body>
 </html>
