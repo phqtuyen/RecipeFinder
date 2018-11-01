@@ -58,6 +58,9 @@
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>1.9.9</version>
+                <configuration>
+                    <set_default>true</set_default>
+                </configuration>
             </plugin>
         </plugins>
     </build>
