@@ -25,4 +25,4 @@ The test is automatically ran when buildRun.sh is ran.
 ### Break down into end to end tests
 
 The project is also deployed in Google Cloud VM in this url: http://35.197.179.194:8080/ 
-The project is also applied with Travis-CI pipeline. 
+The project is also applied with Travis-CI pipeline: [![Build Status](https://travis-ci.org/phqtuyen/RecipeFinder.png)](https://travis-ci.org/phqtuyen/RecipeFinder). 
