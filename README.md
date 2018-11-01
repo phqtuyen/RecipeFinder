@@ -26,3 +26,4 @@ The test is automatically ran when buildRun.sh is ran.
 
 The project is also deployed in Google Cloud VM in this url: http://35.197.179.194:8080/ 
 The project is also applied with Travis-CI pipeline: [![Build Status](https://travis-ci.org/phqtuyen/RecipeFinder.svg?branch=master)](https://travis-ci.org/phqtuyen/RecipeFinder). 
+Test coverage: [![Coverage Status](https://coveralls.io/repos/github/phqtuyen/RecipeFinder/badge.svg?branch=master)](https://coveralls.io/github/phqtuyen/RecipeFinder?branch=master)
