@@ -3,6 +3,10 @@ sudo: false # faster builds
 jdk:
 - oraclejdk8
 
+env:
+  global:
+    - CC_TEST_REPORTER_ID=57fbb196bfe4222c49f984b9b581dc0b0577941485837a1af0d624df07c5a091
+
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
   - chmod +x ./cc-test-reporter
